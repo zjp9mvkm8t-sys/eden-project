@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>에덴 기숙학원의 비밀</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06060e;--bg1:#0a0a1a;--bg2:#0f0f24;--bg3:#15152e;
+  --p:#5546CC;--p2:#7B6EE8;--p3:#A89FF5;--pg:rgba(85,70,204,.14);
+  --teal:#18A87A;--tg:rgba(24,168,122,.12);
+  --amber:#C07A18;--coral:#B83820;--gold:#C8A840;--gold2:#E0C870;
+  --txt:#E6E4F4;--txt2:#9894B8;--txt3:#50506A;
+  --bdr:rgba(85,70,204,.18);--bdr2:rgba(85,70,204,.07);
+  --serif:'Noto Serif KR',serif;--sans:'Noto Sans KR',sans-serif;--mono:'Share Tech Mono',monospace;
+}
+html,body{width:100%;height:100%;background:var(--bg);color:var(--txt);font-family:var(--sans);overflow:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.3;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='.07'/%3E%3C/svg%3E")}
+
+/* ── SCREENS ── */
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .6s;z-index:1}
+.screen.active{opacity:1;pointer-events:all}
+
+/* ══════════════════════════════
+   TITLE
+══════════════════════════════ */
+#s-title{background:radial-gradient(ellipse 70% 55% at 22% 28%,rgba(85,70,204,.22) 0%,transparent 65%),radial-gradient(ellipse 50% 40% at 80% 75%,rgba(24,168,122,.1) 0%,transparent 60%),var(--bg)}
+#s-title::after{content:'';position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.05) 3px,rgba(0,0,0,.05) 4px)}
+.t-wrap{position:relative;z-index:2;text-align:center;max-width:640px;padding:2rem}
+.t-badge{display:inline-flex;align-items:center;gap:.6rem;border:1px solid rgba(200,168,64,.35);color:var(--gold2);font-family:var(--mono);font-size:.64rem;letter-spacing:.26em;padding:.3rem 1rem;margin-bottom:2.6rem;animation:gblink 4s ease-in-out infinite}
+@keyframes gblink{0%,100%{box-shadow:0 0 0 transparent}50%{box-shadow:0 0 18px rgba(200,168,64,.2)}}
+.t-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:bdot 1.7s ease-in-out infinite}
+@keyframes bdot{0%,100%{opacity:1}50%{opacity:.15}}
+.t-en{font-family:var(--mono);font-size:.68rem;letter-spacing:.3em;color:var(--txt3);margin-bottom:.7rem}
+.t-kr{font-family:var(--serif);font-weight:900;font-size:clamp(2.6rem,5.5vw,4.2rem);line-height:1.08;color:var(--txt);text-shadow:0 0 80px rgba(85,70,204,.4);margin-bottom:.5rem;animation:tflick 10s ease-in-out infinite}
+@keyframes tflick{0%,90%,92%,94%,100%{opacity:1}91%,93%{opacity:.8}}
+.t-sub{font-size:.92rem;color:var(--txt2);letter-spacing:.06em;margin-bottom:.4rem}
+.t-sub2{font-family:var(--mono);font-size:.65rem;color:var(--txt3);letter-spacing:.12em;margin-bottom:3rem}
+.t-line{width:160px;height:1px;background:linear-gradient(90deg,transparent,var(--p),transparent);margin:0 auto 2.8rem}
+.btn-start{background:transparent;border:1px solid var(--p);color:var(--txt);font-family:var(--serif);font-size:1rem;font-weight:600;padding:.95rem 3rem;cursor:pointer;letter-spacing:.1em;position:relative;overflow:hidden;transition:all .25s}
+.btn-start::before{content:'';position:absolute;inset:0;background:var(--pg);opacity:0;transition:opacity .25s}
+.btn-start:hover{border-color:var(--p2);transform:translateY(-2px)}
+.btn-start:hover::before{opacity:1}
+.t-hint{margin-top:2.6rem;font-family:var(--mono);font-size:.6rem;color:var(--txt3);letter-spacing:.14em;animation:fhint 3s ease-in-out infinite alternate}
+@keyframes fhint{from{opacity:.25}to{opacity:.65}}
+.bg-ring{position:absolute;border-radius:50%;border:1px solid rgba(85,70,204,.07);pointer-events:none;z-index:1}
+.r1{width:580px;height:580px;top:-160px;right:-120px;animation:spin 40s linear infinite}
+.r2{width:380px;height:380px;bottom:-80px;left:-60px;animation:spin 55s linear infinite reverse}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.corner{position:absolute;width:40px;height:40px;pointer-events:none;z-index:2}
+.c-tl{top:1.5rem;left:1.5rem;border-top:1px solid rgba(200,168,64,.28);border-left:1px solid rgba(200,168,64,.28)}
+.c-tr{top:1.5rem;right:1.5rem;border-top:1px solid rgba(200,168,64,.28);border-right:1px solid rgba(200,168,64,.28)}
+.c-bl{bottom:1.5rem;left:1.5rem;border-bottom:1px solid rgba(200,168,64,.28);border-left:1px solid rgba(200,168,64,.28)}
+.c-br{bottom:1.5rem;right:1.5rem;border-bottom:1px solid rgba(200,168,64,.28);border-right:1px solid rgba(200,168,64,.28)}
+
+/* ══════════════════════════════
+   SCENARIO SELECT
+══════════════════════════════ */
+#s-scenario{background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(85,70,204,.12) 0%,transparent 60%),var(--bg);overflow-y:auto;padding:5rem 2rem 3rem}
+.sc-hd{text-align:center;margin-bottom:2.8rem;position:relative;max-width:980px;width:100%}
+.sc-back{position:absolute;left:0;top:50%;transform:translateY(-50%);background:transparent;border:none;color:var(--txt3);font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;cursor:pointer;transition:color .2s;padding:.3rem .7rem}
+.sc-back:hover{color:var(--p3)}
+.sc-tag{font-family:var(--mono);font-size:.62rem;letter-spacing:.24em;color:var(--txt3);margin-bottom:.5rem}
+.sc-title{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;color:var(--txt)}
+.sc-desc{font-size:.86rem;color:var(--txt2);margin-top:.4rem}
+.sc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.3rem;max-width:980px;width:100%}
+.sc-card{background:rgba(255,255,255,.022);border:1px solid var(--bdr2);border-radius:3px;overflow:hidden;cursor:pointer;position:relative;transition:transform .25s,border-color .25s,box-shadow .25s}
+.sc-card:hover{transform:translateY(-4px)}
+.sc-card.ca:hover{border-color:rgba(85,70,204,.45);box-shadow:0 18px 45px rgba(85,70,204,.14)}
+.sc-card.cb:hover{border-color:rgba(24,168,122,.45);box-shadow:0 18px 45px rgba(24,168,122,.12)}
+.sc-card.cc:hover{border-color:rgba(192,122,24,.45);box-shadow:0 18px 45px rgba(192,122,24,.12)}
+.sc-bar{height:3px}
+.ca .sc-bar{background:linear-gradient(90deg,var(--p),var(--p2))}
+.cb .sc-bar{background:linear-gradient(90deg,var(--teal),#2DD4BF)}
+.cc .sc-bar{background:linear-gradient(90deg,var(--amber),var(--gold2))}
+.sc-body{padding:1.7rem 1.7rem 1.5rem}
+.sc-code{font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;margin-bottom:.7rem;display:flex;align-items:center;gap:.5rem}
+.sc-cdot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.ca .sc-code{color:var(--p3)}.ca .sc-cdot{background:var(--p2)}
+.cb .sc-code{color:#6ECFBC}.cb .sc-cdot{background:var(--teal)}
+.cc .sc-code{color:var(--gold2)}.cc .sc-cdot{background:var(--amber)}
+.sc-name{font-family:var(--serif);font-size:1.2rem;font-weight:700;color:var(--txt);margin-bottom:.3rem;line-height:1.25}
+.sc-genre{font-size:.73rem;color:var(--txt3);margin-bottom:1.1rem}
+.sc-div{height:1px;background:var(--bdr2);margin-bottom:1.1rem}
+.sc-diff-lbl{font-family:var(--mono);font-size:.58rem;color:var(--txt3);letter-spacing:.12em;margin-bottom:.32rem}
+.sc-diff-bar{height:3px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;margin-bottom:1rem}
+.sc-diff-fill{height:100%;border-radius:2px}
+.ca .sc-diff-fill{background:linear-gradient(90deg,var(--p),var(--p2));width:72%}
+.cb .sc-diff-fill{background:linear-gradient(90deg,var(--teal),#2DD4BF);width:58%}
+.cc .sc-diff-fill{background:linear-gradient(90deg,var(--amber),var(--gold2));width:88%}
+.sc-syn{font-size:.8rem;color:var(--txt2);line-height:1.72;margin-bottom:1.2rem}
+.sc-foot{display:flex;align-items:center;justify-content:space-between;padding-top:.9rem;border-top:1px solid var(--bdr2)}
+.sc-qc{font-family:var(--mono);font-size:.63rem;color:var(--txt3)}
+.sc-qc span{color:var(--txt2);font-size:.88rem}
+.sc-enter{background:transparent;border:none;font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;cursor:pointer;display:flex;align-items:center;gap:.35rem;transition:gap .2s}
+.ca .sc-enter{color:var(--p3)}.cb .sc-enter{color:#6ECFBC}.cc .sc-enter{color:var(--gold2)}
+.sc-card:hover .sc-enter{gap:.65rem}
+.sc-glow{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;border-radius:3px}
+.ca .sc-glow{background:radial-gradient(ellipse at 50% 0%,rgba(85,70,204,.1),transparent 70%)}
+.cb .sc-glow{background:radial-gradient(ellipse at 50% 0%,rgba(24,168,122,.08),transparent 70%)}
+.cc .sc-glow{background:radial-gradient(ellipse at 50% 0%,rgba(192,122,24,.08),transparent 70%)}
+.sc-card:hover .sc-glow{opacity:1}
+
+/* ══════════════════════════════
+   LOADING TRANSITION
+══════════════════════════════ */
+#s-loading{background:var(--bg);flex-direction:column;gap:1.4rem}
+.ld-code{font-family:var(--mono);font-size:.68rem;color:var(--txt3);letter-spacing:.2em}
+.ld-title{font-family:var(--serif);font-size:1.55rem;color:var(--txt)}
+.ld-wrap{width:260px;height:2px;background:rgba(255,255,255,.05);border-radius:1px;overflow:hidden}
+.ld-fill{height:100%;width:0;background:linear-gradient(90deg,var(--p),var(--p2));border-radius:1px;transition:width .04s linear}
+.ld-log{font-family:var(--mono);font-size:.6rem;color:var(--txt3);letter-spacing:.1em;min-height:1.1em}
+
+/* ══════════════════════════════
+   GAME SCREEN
+══════════════════════════════ */
+#s-game{flex-direction:row;align-items:stretch;justify-content:flex-start;overflow:hidden}
+
+/* LEFT — map panel */
+.map-panel{width:250px;flex-shrink:0;background:var(--bg1);border-right:1px solid var(--bdr);display:flex;flex-direction:column;overflow:hidden}
+.mp-header{padding:1.1rem 1.3rem .9rem;border-bottom:1px solid var(--bdr2)}
+.mp-gtitle{font-family:var(--serif);font-size:.88rem;color:var(--p3);margin-bottom:.15rem}
+.mp-slabel{font-family:var(--mono);font-size:.58rem;color:var(--txt3);letter-spacing:.14em}
+.quest-list{flex:1;overflow-y:auto;padding:.6rem 0}
+.quest-list::-webkit-scrollbar{width:3px}
+.quest-list::-webkit-scrollbar-thumb{background:var(--bdr)}
+.q-group-lbl{font-family:var(--mono);font-size:.57rem;letter-spacing:.18em;color:var(--txt3);padding:.45rem 1.3rem .25rem;text-transform:uppercase}
+.q-item{display:flex;align-items:center;gap:.7rem;padding:.6rem 1.3rem;cursor:pointer;transition:background .15s;border-left:2px solid transparent;position:relative}
+.q-item:hover{background:var(--bdr2)}
+.q-item.active{background:rgba(85,70,204,.09);border-left-color:var(--p)}
+.q-item.done{border-left-color:var(--teal)}
+.q-item.locked{opacity:.32;cursor:not-allowed}
+.q-dot{width:7px;height:7px;border-radius:50%;border:1.5px solid var(--txt3);flex-shrink:0;transition:all .2s}
+.q-item.active .q-dot{border-color:var(--p);background:var(--p)}
+.q-item.done .q-dot{border-color:var(--teal);background:var(--teal)}
+.q-info{min-width:0}
+.q-code{font-family:var(--mono);font-size:.57rem;color:var(--txt3)}
+.q-name{font-size:.76rem;color:var(--txt2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q-item.active .q-name{color:var(--txt)}
+
+/* TRUST METERS */
+.trust-zone{border-top:1px solid var(--bdr2);padding:.7rem 1.1rem .8rem}
+.tr-row{display:flex;align-items:center;gap:.55rem;margin-bottom:.45rem}
+.tr-name{font-family:var(--mono);font-size:.58rem;color:var(--txt3);width:32px;flex-shrink:0}
+.tr-bar{flex:1;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.tr-fill{height:100%;border-radius:2px;transition:width .5s ease}
+.tr-suin .tr-fill{background:linear-gradient(90deg,var(--p),var(--p2))}
+.tr-aran .tr-fill{background:linear-gradient(90deg,var(--teal),#2DD4BF)}
+.tr-val{font-family:var(--mono);font-size:.58rem;color:var(--txt3);width:24px;text-align:right}
+
+/* INVENTORY */
+.inv-zone{border-top:1px solid var(--bdr2);padding:.7rem 1.1rem .8rem}
+.inv-lbl{font-family:var(--mono);font-size:.57rem;color:var(--txt3);letter-spacing:.13em;margin-bottom:.5rem}
+.inv-slots{display:flex;gap:.35rem;flex-wrap:wrap}
+.inv-slot{width:34px;height:34px;border:1px solid var(--bdr);border-radius:2px;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:.95rem;cursor:default;position:relative;transition:border-color .15s}
+.inv-slot:hover{border-color:var(--p2)}
+.inv-slot .tip{position:absolute;bottom:110%;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--bdr);color:var(--txt);font-size:.6rem;padding:.25rem .55rem;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .15s;z-index:50}
+.inv-slot:hover .tip{opacity:1}
+
+/* CENTER — game area */
+.game-area{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.loc-bar{display:flex;align-items:center;gap:.9rem;padding:.85rem 1.5rem;border-bottom:1px solid var(--bdr2);background:var(--bg1);flex-shrink:0}
+.loc-icon{font-size:1.1rem}
+.loc-stage{font-family:var(--mono);font-size:.58rem;color:var(--txt3);letter-spacing:.14em}
+.loc-name{font-family:var(--serif);font-size:.95rem;color:var(--txt)}
+.timer-disp{margin-left:auto;font-family:var(--mono);font-size:.78rem;color:var(--txt3);display:flex;align-items:center;gap:.45rem}
+.timer-dot{width:6px;height:6px;border-radius:50%;background:var(--teal);animation:tdot 1.5s ease-in-out infinite}
+@keyframes tdot{0%,100%{opacity:1}50%{opacity:.2}}
+.timer-disp.alert{color:var(--coral)}
+.timer-disp.alert .timer-dot{background:var(--coral)}
+.scene-wrap{flex:1;overflow-y:auto;padding:1.8rem 2.2rem}
+.scene-wrap::-webkit-scrollbar{width:4px}
+.scene-wrap::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px}
+.scene-img{width:100%;height:180px;background:var(--bg2);border:1px solid var(--bdr2);border-radius:3px;display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;position:relative;overflow:hidden}
+.scene-img-inner{display:flex;flex-direction:column;align-items:center;gap:.4rem;z-index:1}
+.scene-emoji{font-size:3.5rem}
+.scene-img-lbl{font-family:var(--mono);font-size:.6rem;color:var(--txt3);letter-spacing:.1em}
+.scene-img::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,var(--bg2) 100%)}
+.q-code-tag{font-family:var(--mono);font-size:.63rem;color:var(--p3);letter-spacing:.14em;margin-bottom:.35rem}
+.q-title{font-family:var(--serif);font-size:1.25rem;font-weight:600;color:var(--txt);margin-bottom:.9rem;line-height:1.3}
+.q-problem{background:var(--bg2);border:1px solid var(--bdr2);border-left:3px solid var(--p);border-radius:0 3px 3px 0;padding:.95rem 1.15rem;margin-bottom:1.3rem;font-size:.88rem;color:var(--txt2);line-height:1.72;white-space:pre-line}
+.sec-lbl{font-family:var(--mono);font-size:.6rem;letter-spacing:.16em;color:var(--txt3);text-transform:uppercase;margin-bottom:.45rem}
+.items-row{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:1.3rem}
+.item-chip{display:flex;align-items:center;gap:.35rem;background:var(--bg2);border:1px solid var(--bdr);border-radius:2px;padding:.28rem .65rem;font-size:.76rem;color:var(--txt2);transition:all .2s}
+.item-chip.have{border-color:var(--teal);color:var(--teal)}
+.item-chip.missing{border-color:rgba(184,56,32,.4);color:rgba(255,120,80,.7)}
+.npc-box{background:var(--bg2);border:1px solid var(--bdr2);border-radius:3px;padding:.85rem 1rem;margin-bottom:1.3rem;font-size:.84rem;color:var(--txt2);line-height:1.65;font-style:italic}
+.npc-box strong{color:var(--txt);font-style:normal}
+
+/* ACTION AREA */
+.action-area{border-top:1px solid var(--bdr2);padding:1.1rem 2.2rem;background:var(--bg1);flex-shrink:0}
+.puzzle-wrap{margin-bottom:.9rem}
+.puzzle-lbl{font-family:var(--mono);font-size:.6rem;color:var(--txt3);letter-spacing:.14em;margin-bottom:.45rem}
+.input-row{display:flex;gap:.45rem}
+.code-input{flex:1;max-width:200px;background:var(--bg2);border:1px solid var(--bdr);border-radius:2px;padding:.58rem .85rem;color:var(--txt);font-family:var(--mono);font-size:1rem;letter-spacing:.18em;outline:none;text-transform:uppercase;transition:border-color .2s}
+.code-input:focus{border-color:var(--p)}
+.code-input.err{border-color:var(--coral);animation:shake .35s ease}
+.code-input.ok{border-color:var(--teal)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.btn-submit{background:var(--p);color:#fff;border:none;border-radius:2px;padding:.58rem 1.3rem;font-family:var(--mono);font-size:.76rem;letter-spacing:.09em;cursor:pointer;transition:all .2s;flex-shrink:0}
+.btn-submit:hover{background:var(--p2);transform:translateY(-1px)}
+.btn-submit:disabled{opacity:.38;cursor:not-allowed;transform:none}
+.choice-btns{display:flex;gap:.7rem;flex-wrap:wrap}
+.choice-btn{background:transparent;border:1px solid var(--bdr);border-radius:2px;padding:.6rem 1.1rem;color:var(--txt2);font-size:.83rem;font-family:var(--sans);cursor:pointer;transition:all .2s;text-align:left;line-height:1.4}
+.choice-btn:hover{border-color:var(--p);color:var(--txt);background:var(--pg)}
+.choice-btn.danger:hover{border-color:var(--coral);background:rgba(184,56,32,.07);color:#ff8866}
+.choice-btn.safe:hover{border-color:var(--teal);background:var(--tg);color:var(--teal)}
+.interact-btn{background:transparent;border:1px solid var(--bdr);border-radius:2px;padding:.6rem 1.3rem;color:var(--txt2);font-size:.83rem;cursor:pointer;transition:all .2s;display:inline-flex;align-items:center;gap:.45rem}
+.interact-btn:hover{border-color:var(--p2);color:var(--txt)}
+.feedback{margin-top:.55rem;font-family:var(--mono);font-size:.72rem;min-height:.9em;transition:color .2s}
+.feedback.ok{color:var(--teal)}.feedback.err{color:var(--coral)}.feedback.info{color:var(--p3)}
+
+/* RIGHT — log panel */
+.log-panel{width:210px;flex-shrink:0;background:var(--bg1);border-left:1px solid var(--bdr);display:flex;flex-direction:column;overflow:hidden}
+.log-hdr{padding:1.1rem 1.1rem .8rem;border-bottom:1px solid var(--bdr2);font-family:var(--mono);font-size:.58rem;color:var(--txt3);letter-spacing:.14em}
+.log-list{flex:1;overflow-y:auto;padding:.5rem 0}
+.log-list::-webkit-scrollbar{width:3px}
+.log-list::-webkit-scrollbar-thumb{background:var(--bdr)}
+.log-entry{padding:.45rem 1.1rem;border-bottom:1px solid var(--bdr2);animation:lgin .28s ease}
+@keyframes lgin{from{opacity:0;transform:translateX(6px)}to{opacity:1;transform:translateX(0)}}
+.log-time{font-family:var(--mono);font-size:.55rem;color:var(--txt3);margin-bottom:.08rem}
+.log-text{font-size:.7rem;color:var(--txt2);line-height:1.4}
+.log-entry.good .log-text{color:var(--teal)}
+.log-entry.bad  .log-text{color:var(--coral)}
+.log-entry.key  .log-text{color:var(--gold)}
+/* hint */
+.hint-zone{border-top:1px solid var(--bdr2);padding:.7rem 1.1rem}
+.hint-toggle{background:transparent;border:none;color:var(--txt3);font-family:var(--mono);font-size:.58rem;letter-spacing:.09em;cursor:pointer;width:100%;text-align:left;padding:0;display:flex;justify-content:space-between;transition:color .2s}
+.hint-toggle:hover{color:var(--p3)}
+.hint-body{margin-top:.5rem;font-size:.7rem;color:var(--txt3);line-height:1.55;display:none;white-space:pre-line}
+.hint-body.open{display:block}
+
+/* ══════════════════════════════
+   MODAL
+══════════════════════════════ */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(6,6,14,.85);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .32s;backdrop-filter:blur(5px)}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal-box{background:var(--bg1);border:1px solid var(--bdr);border-radius:4px;padding:2.2rem 2.6rem;max-width:440px;width:90%;text-align:center;transform:translateY(18px);transition:transform .32s;box-shadow:0 36px 72px rgba(0,0,0,.6)}
+.modal-overlay.open .modal-box{transform:translateY(0)}
+.modal-icon{font-size:2.6rem;margin-bottom:.9rem}
+.modal-title{font-family:var(--serif);font-size:1.35rem;color:var(--txt);margin-bottom:.5rem}
+.modal-body{font-size:.86rem;color:var(--txt2);line-height:1.72;margin-bottom:1.6rem;white-space:pre-line}
+.modal-btns{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap}
+.modal-btn{padding:.58rem 1.5rem;border-radius:2px;font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;cursor:pointer;transition:all .2s;border:none}
+.modal-btn.primary{background:var(--p);color:#fff}
+.modal-btn.primary:hover{background:var(--p2)}
+.modal-btn.secondary{background:transparent;border:1px solid var(--bdr);color:var(--txt2)}
+.modal-btn.secondary:hover{border-color:var(--p);color:var(--txt)}
+.modal-btn.danger{background:var(--coral);color:#fff}
+
+/* ══════════════════════════════
+   ENDING SCREEN
+══════════════════════════════ */
+#s-ending{background:var(--bg);flex-direction:column;gap:1.2rem;text-align:center;padding:2rem}
+.end-badge{font-family:var(--mono);font-size:.65rem;letter-spacing:.22em;color:var(--gold2);border:1px solid rgba(200,168,64,.3);padding:.28rem 1rem;margin-bottom:.5rem}
+.end-title{font-family:var(--serif);font-size:clamp(1.8rem,4vw,3rem);font-weight:900;color:var(--txt);text-shadow:0 0 60px rgba(85,70,204,.35)}
+.end-sub{font-size:.95rem;color:var(--txt2);max-width:500px;line-height:1.8}
+.end-trust{display:flex;gap:2rem;justify-content:center;margin-top:.5rem}
+.end-t{font-family:var(--mono);font-size:.72rem;color:var(--txt3)}
+.end-t span{color:var(--txt2)}
+.end-btns{display:flex;gap:.8rem;justify-content:center;margin-top:1rem;flex-wrap:wrap}
+.end-btn{padding:.7rem 1.8rem;border-radius:2px;font-family:var(--mono);font-size:.76rem;letter-spacing:.1em;cursor:pointer;transition:all .2s;border:none}
+.end-btn.primary{background:var(--p);color:#fff}
+.end-btn.primary:hover{background:var(--p2)}
+.end-btn.outline{background:transparent;border:1px solid var(--bdr);color:var(--txt2)}
+.end-btn.outline:hover{border-color:var(--p);color:var(--txt)}
+
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:rgba(85,70,204,.35);border-radius:2px}
+</style>
+</head>
+<body>
+
+<!-- ══════ TITLE ══════ -->
+<section class="screen active" id="s-title">
+  <div class="bg-ring r1"></div><div class="bg-ring r2"></div>
+  <div class="corner c-tl"></div><div class="corner c-tr"></div>
+  <div class="corner c-bl"></div><div class="corner c-br"></div>
+  <div class="t-wrap">
+    <div class="t-badge"><div class="t-dot"></div>ARG · ROOM ESCAPE · DIGITAL STORYTELLING</div>
+    <div class="t-en">EDEN ACADEMY — THE SECRET</div>
+    <h1 class="t-kr">에덴 기숙학원의<br>비밀</h1>
+    <p class="t-sub">생체 실험실 탈출 및 친구 구출</p>
+    <p class="t-sub2">Chapter 10 · 11 · 12 디지털 스토리텔링 실습 적용</p>
+    <div class="t-line"></div>
+    <button class="btn-start" onclick="SS('s-scenario')">게임 시작하기</button>
+    <p class="t-hint">▸ 시나리오를 선택하고 에덴의 비밀을 파헤쳐라</p>
+  </div>
+</section>
+
+<!-- ══════ SCENARIO SELECT ══════ -->
+<section class="screen" id="s-scenario">
+  <div class="sc-hd">
+    <button class="sc-back" onclick="SS('s-title')">← 뒤로</button>
+    <p class="sc-tag">SELECT SCENARIO</p>
+    <h2 class="sc-title">시나리오를 선택하세요</h2>
+    <p class="sc-desc">세 가지 이야기는 각각 다른 장르와 진실을 담고 있습니다.</p>
+  </div>
+  <div class="sc-grid">
+    <div class="sc-card ca" onclick="startGame('A')">
+      <div class="sc-glow"></div><div class="sc-bar"></div>
+      <div class="sc-body">
+        <div class="sc-code"><div class="sc-cdot"></div>SCENARIO · A</div>
+        <h3 class="sc-name">에덴의 가면</h3>
+        <p class="sc-genre">심리 스릴러 × 바이오호러</p>
+        <div class="sc-div"></div>
+        <div class="sc-diff-lbl">DIFFICULTY · ★★★★☆</div>
+        <div class="sc-diff-bar"><div class="sc-diff-fill"></div></div>
+        <p class="sc-syn">절친 규리를 찾아 위장 전입한 서연. 완벽한 모범생 수인을 믿고 따르지만, 믿었던 손길이 가장 위험한 함정이었다.</p>
+        <div class="sc-foot"><div class="sc-qc">QUESTS <span>11</span></div><button class="sc-enter">시작 →</button></div>
+      </div>
+    </div>
+    <div class="sc-card cb" onclick="startGame('B')">
+      <div class="sc-glow"></div><div class="sc-bar"></div>
+      <div class="sc-body">
+        <div class="sc-code"><div class="sc-cdot"></div>SCENARIO · B</div>
+        <h3 class="sc-name">무균실의 기억</h3>
+        <p class="sc-genre">SF 디스토피아 × 탈출 미스터리</p>
+        <div class="sc-div"></div>
+        <div class="sc-diff-lbl">DIFFICULTY · ★★★☆☆</div>
+        <div class="sc-diff-bar"><div class="sc-diff-fill"></div></div>
+        <p class="sc-syn">규리가 미리 숨겨둔 암호와 기록이 탈출의 열쇠. 먼저 탈출한 아란의 기억마저 조작됐다면?</p>
+        <div class="sc-foot"><div class="sc-qc">QUESTS <span>7</span></div><button class="sc-enter">시작 →</button></div>
+      </div>
+    </div>
+    <div class="sc-card cc" onclick="startGame('C')">
+      <div class="sc-glow"></div><div class="sc-bar"></div>
+      <div class="sc-body">
+        <div class="sc-code"><div class="sc-cdot"></div>SCENARIO · C</div>
+        <h3 class="sc-name">선택받은 자들</h3>
+        <p class="sc-genre">도덕 공포 × 사회 비판 스릴러</p>
+        <div class="sc-div"></div>
+        <div class="sc-diff-lbl">DIFFICULTY · ★★★★★</div>
+        <div class="sc-diff-bar"><div class="sc-diff-fill"></div></div>
+        <p class="sc-syn">수인은 에덴의 철학을 진심으로 믿는다. 탈출 후에도 선택해야 한다 — 진실을 세상에 알릴 것인가.</p>
+        <div class="sc-foot"><div class="sc-qc">QUESTS <span>6</span></div><button class="sc-enter">시작 →</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ LOADING ══════ -->
+<section class="screen" id="s-loading">
+  <p class="ld-code" id="ld-code">LOADING...</p>
+  <p class="ld-title" id="ld-title">에덴의 가면</p>
+  <div class="ld-wrap"><div class="ld-fill" id="ld-fill"></div></div>
+  <p class="ld-log" id="ld-log">초기화 중...</p>
+</section>
+
+<!-- ══════ GAME ══════ -->
+<section class="screen" id="s-game">
+  <!-- LEFT MAP -->
+  <div class="map-panel">
+    <div class="mp-header">
+      <div class="mp-gtitle" id="mp-gtitle">에덴의 가면</div>
+      <div class="mp-slabel" id="mp-slabel">SCENARIO · A</div>
+    </div>
+    <div class="quest-list" id="quest-list"></div>
+    <div class="trust-zone">
+      <div class="tr-row tr-suin">
+        <div class="tr-name">수인</div>
+        <div class="tr-bar"><div class="tr-fill" id="tr-suin" style="width:0%"></div></div>
+        <div class="tr-val" id="tv-suin">0</div>
+      </div>
+      <div class="tr-row tr-aran">
+        <div class="tr-name">아란</div>
+        <div class="tr-bar"><div class="tr-fill" id="tr-aran" style="width:0%"></div></div>
+        <div class="tr-val" id="tv-aran">0</div>
+      </div>
+    </div>
+    <div class="inv-zone">
+      <div class="inv-lbl">INVENTORY</div>
+      <div class="inv-slots" id="inv-slots"></div>
+    </div>
+  </div>
+
+  <!-- CENTER GAME AREA -->
+  <div class="game-area">
+    <div class="loc-bar">
+      <div class="loc-icon" id="loc-icon">🏫</div>
+      <div>
+        <div class="loc-stage" id="loc-stage">STAGE 1</div>
+        <div class="loc-name" id="loc-name">야간 복도</div>
+      </div>
+      <div class="timer-disp" id="timer-disp" style="display:none">
+        <div class="timer-dot"></div>
+        <span id="timer-val">05:00</span>
+      </div>
+    </div>
+    <div class="scene-wrap" id="scene-wrap">
+      <div class="scene-img" id="scene-img">
+        <div class="scene-img-inner">
+          <div class="scene-emoji" id="scene-emoji">🏫</div>
+          <div class="scene-img-lbl" id="scene-img-lbl">야간 복도</div>
+        </div>
+      </div>
+      <div class="q-code-tag" id="q-code-tag">A-01</div>
+      <div class="q-title" id="q-title">퀘스트 제목</div>
+      <div class="q-problem" id="q-problem">문제 내용</div>
+      <div class="sec-lbl" id="items-lbl" style="display:none">필요 아이템</div>
+      <div class="items-row" id="items-row"></div>
+      <div class="npc-box" id="npc-box" style="display:none"></div>
+    </div>
+    <div class="action-area" id="action-area">
+      <div class="feedback" id="feedback"></div>
+    </div>
+  </div>
+
+  <!-- RIGHT LOG -->
+  <div class="log-panel">
+    <div class="log-hdr">ACTIVITY LOG</div>
+    <div class="log-list" id="log-list"></div>
+    <div class="hint-zone">
+      <button class="hint-toggle" id="hint-toggle" onclick="toggleHint()">
+        <span>힌트 보기</span><span id="hint-count"></span>
+      </button>
+      <div class="hint-body" id="hint-body"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ ENDING ══════ -->
+<section class="screen" id="s-ending">
+  <div class="end-badge" id="end-badge">ENDING</div>
+  <div class="end-title" id="end-title">탈출 완료</div>
+  <div class="end-sub" id="end-sub">규리를 구출했습니다.</div>
+  <div class="end-trust">
+    <div class="end-t">수인 신뢰도 <span id="end-suin">0</span></div>
+    <div class="end-t">아란 신뢰도 <span id="end-aran">0</span></div>
+  </div>
+  <div class="end-btns">
+    <button class="end-btn primary" onclick="SS('s-title')">처음으로</button>
+    <button class="end-btn outline" onclick="SS('s-scenario')">다른 시나리오</button>
+  </div>
+</section>
+
+<!-- ══════ MODAL ══════ -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-icon" id="modal-icon">📜</div>
+    <div class="modal-title" id="modal-title">제목</div>
+    <div class="modal-body" id="modal-body">내용</div>
+    <div class="modal-btns" id="modal-btns"></div>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════
+   GAME STATE
+════════════════════════════════════ */
+const GS = {
+  scenario: null, currentQuest: null,
+  completedQuests: [], inventory: [],
+  trust: { suin: 0, aran: 0 },
+  hqCompleted: [], hintsUsed: {},
+  timerInterval: null, timerRemaining: 0,
+};
+const LOG = [];
+
+/* ════════════════════════════════════
+   ITEM DATABASE
+════════════════════════════════════ */
+const ITEMS = {
+  notebook:   { name:'규리의 암호 노트', emoji:'📓' },
+  flashlight: { name:'손전등',          emoji:'🔦' },
+  schedule:   { name:'청소 일정표',      emoji:'📋' },
+  map_piece:  { name:'학원 지도 조각',   emoji:'🗺️' },
+  note_aran:  { name:'아란의 쪽지',     emoji:'📝' },
+  drug_code:  { name:'약품 코드 메모',  emoji:'🧪' },
+  bracelet:   { name:'규리의 갈색 팔찌',emoji:'📿' },
+  note_guri:  { name:'규리의 쪽지',     emoji:'📜' },
+  hairpin:    { name:'수인의 비녀 배지',emoji:'📌' },
+  coin:       { name:'동전',            emoji:'🪙' },
+  vial:       { name:'혈청 샘플',       emoji:'💉' },
+  criteria:   { name:'선별 기준표',     emoji:'📄' },
+};
+
+/* ════════════════════════════════════
+   QUEST DATABASE — SCENARIO A (전체 11개)
+════════════════════════════════════ */
+const QUESTS_A = {
+  'A-01': {
+    stage:1, emoji:'🌙', loc:'야간 복도', title:'경비원의 패턴',
+    problem:'경비원의 순찰 패턴이 불규칙하게 바뀌었다.\n보안 센서가 복도 곳곳에 설치되어 있으며,\n수인 없이 단독으로 통과해야 한다.',
+    type:'observe',
+    npc:'수인: "조심해요. 경비 패턴을 먼저 파악해야 해."',
+    items:[], grants:['schedule','flashlight'],
+    hints:['복도 벽면 어딘가에 일정이 적혀 있어.','청소 일정표의 밑줄 친 숫자가 순찰 간격(분)이야.'],
+    hintsMax:2, timeLimit:0,
+    trust:{suin:5,aran:0}, next:'A-02',
+  },
+  'A-02': {
+    stage:1, emoji:'🔒', loc:'기숙사 3층 사물함', title:'규리의 사물함',
+    problem:'규리의 사물함이 잠겨 있다.\n4자리 숫자 자물쇠.\n사물함 문에 희미한 낙서가 보인다: "0315"',
+    type:'code', answer:'5130',
+    npc:'서연(내면): "낙서... 규리는 항상 뭔가를 거꾸로 썼는데."',
+    items:[], grants:['notebook'],
+    hints:['규리는 생일을 항상 거꾸로 쓰는 습관이 있었어.','0315를 거꾸로 읽으면?'],
+    hintsMax:3, timeLimit:0,
+    trust:{suin:0,aran:0}, next:'A-03',
+  },
+  'A-03': {
+    stage:1, emoji:'📓', loc:'기숙사 3층 사물함', title:'규리 노트 — 1차 분석',
+    problem:'규리 노트 마지막 페이지.\n해부학 기호와 숫자가 뒤섞여 있다.\n단독으로는 해독 불가 — 약품 창고의 단서가 필요하다.',
+    type:'observe',
+    npc:'서연(내레이션): "이건... 암호야. 아직 뭔지 모르겠어. 일단 기록해두자."',
+    items:['notebook'], grants:[],
+    hints:['노트만으로는 해독할 수 없어. 다른 단서가 필요해.','Stage 2에서 약품 코드를 발견하면 교차 분석할 수 있어.'],
+    hintsMax:1, timeLimit:0,
+    trust:{suin:0,aran:0}, next:'A-04',
+  },
+  'A-04': {
+    stage:1, emoji:'🏛️', loc:'학생회실', title:'학생회실 금고',
+    problem:'수인이 안내한 학생회실 금고.\n비밀번호를 모른다.\n벽면에 역대 학생회장 사진이 걸려 있다.',
+    type:'code', answer:'2019',
+    npc:'수인: "잠깐, 제가 비밀번호 알아볼게요~ 조금만 기다려요."',
+    items:[], grants:['map_piece'],
+    hints:['역대 학생회장 사진의 재임 연도를 순서대로 보면...','가장 최근 수인의 재임 연도는 2019년이야.'],
+    hintsMax:2, timeLimit:0,
+    trust:{suin:20,aran:0}, next:'A-05',
+  },
+  'A-05': {
+    stage:2, emoji:'🏥', loc:'폐쇄된 보건실 복도', title:'어둠 속의 아란',
+    problem:'전등이 꺼지고 어둠 속에서 아란이 등장.\n쪽지를 건네려 하지만 서연은 공황 상태.\n어떻게 할 것인가?',
+    type:'choice',
+    choices:[
+      {text:'📝 아란의 쪽지를 받는다', safe:true},
+      {text:'🏃 수인 뒤에 숨는다', danger:true},
+      {text:'🤐 가만히 지켜본다', neutral:true},
+    ],
+    correctChoice:0,
+    npc:'아란(거친 말투): "야. 거기 서. 나쁜 사람 아니야."',
+    items:[], grants:[],
+    hints:['아란이 건네는 쪽지에 중요한 단서가 있을 수 있어.','수인을 너무 믿으면 나중에 후회할 수 있어.'],
+    hintsMax:2, timeLimit:0,
+    trust:{suin:0,aran:0}, next:'A-06',
+    choiceTrust:[
+      {aran:20}, {suin:10,aran:-30}, {aran:-10}
+    ],
+    choiceGrant:[['note_aran'],[],[]],
+  },
+  'A-06': {
+    stage:2, emoji:'🧪', loc:'보건실 약품 창고', title:'약품 코드 교차 분석',
+    problem:'창고에 마취제·면역 억제제·혈청이 섞여 있다.\n선반 라벨에 코드가 적혀 있다: "B-3-47"\n안쪽 냉장고가 잠겨 있다.\n\n카이사르 암호 힌트: EDEN → IHIR (이동 칸수: 4)\n규리 노트의 암호문을 해독하면 냉장고 코드가 나온다.',
+    type:'caesar',
+    cipherText:'HILR',
+    shift:4,
+    answer:'DONE',
+    npc:'서연(내레이션): "B-3-47... 이 숫자 어디서 봤는데. 규리 노트!"',
+    items:['notebook'], grants:['drug_code','vial'],
+    hints:['카이사르 암호: 알파벳을 4칸 역방향으로 이동해.','HILR → 각 글자를 4칸 뒤로: H→D, I→E, L→?, R→?'],
+    hintsMax:2, timeLimit:0,
+    trust:{suin:0,aran:0}, next:'A-07',
+  },
+  'A-07': {
+    stage:2, emoji:'🖼️', loc:'원장 집무실', title:'원장실 서랍의 비밀',
+    problem:'책상 서랍이 잠겨 있다.\n힌트 문구: "내가 이 방에서 제일 좋아하는 것"\n방 안에 화분, 시계, 액자, 책 등 소품이 있다.',
+    type:'observe',
+    npc:'수인(뒤에서): "저도 저 서랍이 항상 신경 쓰였어요~"',
+    items:[], grants:['bracelet'],
+    hints:['책상 위 액자 속 사진을 자세히 봐.','액자를 뒤집으면 뭔가 붙어 있을 수 있어.'],
+    hintsMax:2, timeLimit:0,
+    trust:{suin:0,aran:0}, next:'A-08',
+  },
+  'A-08': {
+    stage:2, emoji:'🪆', loc:'원장 집무실', title:'해부 인형의 비밀',
+    problem:'책상 위 해부학 실습 인형.\n규리 노트에 "인형 배 속을 봐"라고 적혀 있었다.\n(수인이 자리를 비운 사이에만 조사 가능)',
+    type:'observe',
+    npc:'서연(내레이션): "규리 노트에 이 인형 얘기가 있었어..."',
+    items:['notebook'], grants:['note_guri'],
+    hints:['인형의 복부에 지퍼가 있어.','수인이 없을 때 조사해야 해.'],
+    hintsMax:1, timeLimit:0,
+    trust:{suin:0,aran:0}, next:'A-09',
+  },
+  'A-09': {
+    stage:3, emoji:'🛗', loc:'지하 엘리베이터 앞', title:'최후의 갈림길',
+    problem:'두 갈래 복도. 60초 제한.\n지금까지 수집한 모든 단서가 이 선택의 근거다.\n\n수인: "이쪽이 보안이 취약해요. 논리적으로 맞아요."\n아란: "야!! 저쪽은 소각장이야! 지하는 이쪽이야!!"',
+    type:'logic',
+    choices:[
+      {text:'🤍 수인을 따라간다', danger:true},
+      {text:'💚 아란을 따라간다', safe:true},
+    ],
+    correctChoice:1,
+    npc:'서연(내면): "지금까지 찾은 단서들을 떠올려봐."',
+    items:[], grants:[],
+    hints:['아란의 쪽지에 뭐라고 적혀 있었지?','규리의 인형 쪽지와 약품 코드를 다시 생각해봐.'],
+    hintsMax:0, timeLimit:60,
+    trust:{suin:0,aran:0}, next:'A-10',
+    choiceTrust:[{suin:0,aran:0},{aran:20}],
+    choiceGrant:[[],['hairpin']],
+    choiceNext:['A-10-gas','A-11'],
+  },
+  'A-10-gas': {
+    stage:3, emoji:'☠️', loc:'가스 살포실', title:'탈출 — 타임어택',
+    problem:'수인을 따라간 방. 문이 잠기고 가스가 새기 시작한다.\n5분 안에 탈출해야 한다!\n\n소화기 뒤 환기구 위치 확인.\n책상 위 동전으로 나사 4개 제거.\n환기구 안 스티커 숫자 입력.',
+    type:'code', answer:'2749',
+    npc:'수인: "미안해요. 당신들은 처음부터 조건에 맞았어요."',
+    items:['coin'], grants:[],
+    hints:['소화기를 옮겨봐. 뒤에 환기구가 있어.','환기구 안쪽 스티커에 숫자가 적혀 있어.'],
+    hintsMax:1, timeLimit:300,
+    trust:{suin:0,aran:0}, next:'A-11',
+  },
+  'A-11': {
+    stage:3, emoji:'🧬', loc:'지하 -3층 무균 격리실', title:'규리를 찾아서',
+    problem:'비녀 배지로 엘리베이터를 개방했다.\n무균실 안에 규리가 있다.\n탈출구 문에 최종 암호 입력창.\n\n규리 노트 + 약품 코드를 최종 교차 분석해 암호를 해독하라.',
+    type:'code', answer:'7823',
+    npc:'규리(약한 목소리): "서연아... 왔구나."',
+    items:['notebook','drug_code'], grants:[],
+    hints:['규리 노트의 기호를 약품 코드 B-3-47과 대조해봐.','기호 순서대로 숫자 치환 → 4자리 코드.'],
+    hintsMax:2, timeLimit:0,
+    trust:{suin:0,aran:0}, next:'ENDING',
+  },
+};
+
+/* ════════════════════════════════════
+   SCENARIO B / C — 간략 구현
+════════════════════════════════════ */
+const QUESTS_B = {
+  'B-01':{ stage:1,emoji:'🔒',loc:'기숙사 사물함',title:'규리의 사물함',problem:'규리의 사물함이 잠겨 있다.\n4자리 숫자 자물쇠.\n사물함 문 낙서: "0315"',type:'code',answer:'5130',npc:'서연(내면): "규리는 생일을 항상 거꾸로 썼는데..."',items:[],grants:['notebook'],hints:['0315를 거꾸로 읽어봐.'],hintsMax:2,timeLimit:0,trust:{suin:0,aran:0},next:'B-02' },
+  'B-02':{ stage:1,emoji:'📱',loc:'복도 QR 게시판',title:'유튜브 모스부호',problem:'학원 홍보 QR코드를 스캔하면 영상 재생.\n14:88 구간에 이상한 소리가 들린다.\n인게임 모스부호 분석기로 해독하라.',type:'observe',npc:'서연(내레이션): "14:88... 비정상적인 타임스탬프야."',items:[],grants:['drug_code'],hints:['모스부호 앱으로 배경음을 분석해봐.','SOS + HELP + 숫자가 들린다.'],hintsMax:2,timeLimit:0,trust:{suin:0,aran:0},next:'B-03' },
+  'B-03':{ stage:2,emoji:'🧪',loc:'보건실 약품 창고',title:'약품 코드 교차 분석',problem:'약품 라벨: "B-3-47"\n규리 노트의 기호와 대조.\n냉장고 코드: B+3+4+7의 숫자 합',type:'code',answer:'0014',npc:'서연(내레이션): "B-3-47... 지하 3층, 규리 번호 47!"',items:['notebook'],grants:['vial'],hints:['B+3+4+7을 더해봐.','4자리로 맞추면 0014야.'],hintsMax:2,timeLimit:0,trust:{suin:0,aran:0},next:'B-04' },
+  'B-04':{ stage:2,emoji:'💻',loc:'원장 집무실',title:'원장 노트북',problem:'원장실 노트북이 잠겨 있다.\n힌트: "내가 이 방에서 제일 자주 보는 것의 개수"',type:'code',answer:'0003',npc:'서연(내레이션): "책장의 같은 제목 책이 몇 권이지?"',items:[],grants:['criteria'],hints:['책장을 자세히 봐.','반복된 제목의 책 권수가 비밀번호야.'],hintsMax:2,timeLimit:0,trust:{suin:0,aran:0},next:'B-05' },
+  'B-05':{ stage:2,emoji:'📄',loc:'원장 집무실',title:'선별 기준표 발견',problem:'선별 기준표 발견.\n규리 이름 + 서연 자신의 이름도 있다.\nisolation_potential=0.5',type:'observe',npc:'서연(내레이션): "...내 이름도. 나도 처음부터 실험 대상이었어."',items:[],grants:[],hints:['이 문서가 에덴의 실체를 폭로한다.'],hintsMax:0,timeLimit:0,trust:{suin:0,aran:20},next:'B-06' },
+  'B-06':{ stage:3,emoji:'🛗',loc:'지하 엘리베이터 앞',title:'갈림길',problem:'두 갈래 복도. 수인 vs 아란.\n아란 주머니에서 규리 노트 암호 조각 발견.',type:'choice',choices:[{text:'💚 아란 노트 조각을 대조한다',safe:true},{text:'🤍 수인 설명을 먼저 듣는다',danger:true}],correctChoice:0,npc:'아란: "이거 규리한테 받았어. 탈출 전날."',items:[],grants:['hairpin'],hints:['노트 조각이 일치하면 아란이 진실을 말하는 거야.'],hintsMax:1,timeLimit:0,trust:{suin:0,aran:0},next:'B-07',choiceTrust:[{aran:20},{suin:10}],choiceGrant:[['hairpin'],[]],choiceNext:['B-07','B-07'] },
+  'B-07':{ stage:3,emoji:'🧬',loc:'지하 -3층 무균 격리실',title:'규리를 찾아서',problem:'규리가 있다. 탈출구 최종 암호.\n규리 노트 + 약품 코드 + 모스부호 각 단서의 첫 숫자 → 4자리',type:'code',answer:'5047',npc:'규리: "서연아. 내가 단서 다 숨겨뒀어. 믿어줘서 고마워."',items:['notebook','drug_code'],grants:[],hints:['각 단서의 첫 숫자만 순서대로.','5(사물함)→0(모스부호)→4(약품)→7(?)'],hintsMax:2,timeLimit:0,trust:{suin:0,aran:0},next:'ENDING' },
+};
+
+const QUESTS_C = {
+  'C-01':{ stage:1,emoji:'🎓',loc:'입학식 강당',title:'규리의 흔적',problem:'수인: "규리는 적합하지 않았어요."\n강당 좌석 아래 포스트잇이 붙어 있다.\n잉크가 두 가지 색이다.',type:'observe',npc:'수인(따뜻한 미소): "걱정 마세요. 규리는 스스로 나간 거예요."',items:[],grants:['note_guri'],hints:['좌석 하단을 조사해봐.','먼저 쓴 글자만 읽어봐.'],hintsMax:2,timeLimit:0,trust:{suin:0,aran:0},next:'C-02' },
+  'C-02':{ stage:1,emoji:'🏛️',loc:'학생회실',title:'명단과 금고',problem:'이달의 우수 학생 명단.\n규리 이름 옆 붉은 X 표시.\n책상 아래 금고. X 표시 학생 번호 순서대로.',type:'code',answer:'040723',npc:'서연(내면): "X 표시된 학생들... 번호가 뭐지?"',items:[],grants:['criteria'],hints:['X 표시된 학생 번호를 순서대로 나열해봐.','04-07-23'],hintsMax:1,timeLimit:120,trust:{suin:0,aran:0},next:'C-03' },
+  'C-03':{ stage:2,emoji:'💫',loc:'복도',title:'아란의 UV 쪽지',problem:'아란이 피 얼룩 묻은 쪽지를 건넨다.\n수인이 멀리서 지켜보고 있다.\n화장실 형광등 아래에서 뒷면을 확인해야 한다.',type:'choice',choices:[{text:'📝 쪽지를 받는다',safe:true},{text:'❌ 거부한다',danger:true}],correctChoice:0,npc:'아란: "받아. 수인 앞에선 읽지 마."',items:[],grants:[],hints:['쪽지를 받아야 UV 메시지를 볼 수 있어.'],hintsMax:1,timeLimit:0,trust:{suin:0,aran:0},next:'C-04',choiceTrust:[{aran:20},{aran:-20}],choiceGrant:[[],[]] },
+  'C-04':{ stage:2,emoji:'📄',loc:'원장 집무실',title:'팔찌 매듭과 금고',problem:'선별 기준표 발견. 규리+서연 이름.\n서류 뒤 규리의 갈색 매듭 팔찌.\n팔찌 매듭 수 → 금고 비번 앞자리.\n규리 실험체 번호 끝 두 자리 → 뒷자리.',type:'code',answer:'747',npc:'서연(내레이션): "팔찌 매듭이 7개... 그리고 규리 번호가 47..."',items:[],grants:['bracelet','hairpin'],hints:['팔찌 매듭 수는 7개야.','규리의 실험체 번호 끝 두 자리는 47이야.'],hintsMax:2,timeLimit:0,trust:{suin:0,aran:0},next:'C-05' },
+  'C-05':{ stage:3,emoji:'🛗',loc:'지하 엘리베이터 앞',title:'도덕적 선택',problem:'수인이 선별 기준표를 꺼내며 말한다.\n"당신은 이미 선택됐어요. 협조하면 살 수 있어요."\n\n이 선택에는 제한 시간이 없다.\n충분히 생각하고 결정해라.',type:'choice',choices:[{text:'🤝 수인 제안을 수락한다',danger:true},{text:'💪 거부하고 아란과 함께한다',safe:true}],correctChoice:1,npc:'수인: "에덴은 틀리지 않았어요. 사회는 원래 적자만 살아남아요."',items:[],grants:[],hints:['이 선택이 엔딩을 결정해.'],hintsMax:0,timeLimit:0,trust:{suin:0,aran:0},next:'C-06',choiceTrust:[{suin:50},{aran:20}],choiceGrant:[[],['hairpin']],choiceNext:['ENDING-DEFEAT','C-06'] },
+  'C-06':{ stage:3,emoji:'🧬',loc:'지하 -3층 무균 격리실',title:'규리의 날짜 암호',problem:'규리가 있다. 탈출구 최종 암호.\n벽에 규리가 긁어 쓴 날짜들.\n날짜들의 공통점: 모두 규리가 괴롭힘당한 날.\n각 날짜의 일(日) 숫자만 순서대로.',type:'code',answer:'0312',npc:'규리: "서연아. 나 살아 있어."',items:[],grants:[],hints:['날짜에서 일(日)만 추출해봐.','03-12 순서야.'],hintsMax:2,timeLimit:0,trust:{suin:0,aran:0},next:'ENDING' },
+};
+
+const QUEST_DB = { A: QUESTS_A, B: QUESTS_B, C: QUESTS_C };
+const SCENARIO_META = {
+  A:{ title:'에덴의 가면', label:'SCENARIO · A', order:['A-01','A-02','A-03','A-04','A-05','A-06','A-07','A-08','A-09','A-10-gas','A-11'], stages:{1:['A-01','A-02','A-03','A-04'],2:['A-05','A-06','A-07','A-08'],3:['A-09','A-10-gas','A-11']} },
+  B:{ title:'무균실의 기억', label:'SCENARIO · B', order:['B-01','B-02','B-03','B-04','B-05','B-06','B-07'], stages:{1:['B-01','B-02'],2:['B-03','B-04','B-05'],3:['B-06','B-07']} },
+  C:{ title:'선택받은 자들', label:'SCENARIO · C', order:['C-01','C-02','C-03','C-04','C-05','C-06'], stages:{1:['C-01','C-02'],2:['C-03','C-04'],3:['C-05','C-06']} },
+};
+
+/* ════════════════════════════════════
+   SCREEN & UTIL
+════════════════════════════════════ */
+function SS(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+
+function addLog(text,type='normal'){
+  const now=new Date(); const t=`${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+  LOG.unshift({time:t,text,type}); renderLog();
+}
+function renderLog(){
+  const el=document.getElementById('log-list');
+  el.innerHTML=LOG.slice(0,30).map(e=>`<div class="log-entry ${e.type}"><div class="log-time">${e.time}</div><div class="log-text">${e.text}</div></div>`).join('');
+}
+function showFeedback(type,msg){ const el=document.getElementById('feedback'); el.className='feedback '+type; el.textContent=msg; }
+function clearFeedback(){ document.getElementById('feedback').textContent=''; }
+
+function grantItem(id){
+  if(!ITEMS[id]||GS.inventory.find(i=>i.id===id))return;
+  GS.inventory.push({id,...ITEMS[id]});
+  updateInv(); addLog(`아이템 획득: ${ITEMS[id].emoji} ${ITEMS[id].name}`,'key');
+}
+function hasItem(id){ return GS.inventory.some(i=>i.id===id); }
+function updateInv(){
+  const el=document.getElementById('inv-slots');
+  el.innerHTML=GS.inventory.map(i=>`<div class="inv-slot">${i.emoji}<div class="tip">${i.name}</div></div>`).join('');
+}
+function adjustTrust(t,v){
+  GS.trust[t]=Math.max(0,Math.min(100,GS.trust[t]+v));
+  document.getElementById('tr-'+t).style.width=GS.trust[t]+'%';
+  document.getElementById('tv-'+t).textContent=GS.trust[t];
+}
+
+/* ════════════════════════════════════
+   TIMER
+════════════════════════════════════ */
+function startTimer(sec,onEnd){
+  stopTimer(); GS.timerRemaining=sec;
+  const disp=document.getElementById('timer-disp'); disp.style.display='flex';
+  updateTimerUI();
+  GS.timerInterval=setInterval(()=>{
+    GS.timerRemaining--;updateTimerUI();
+    if(GS.timerRemaining<=0){stopTimer();onEnd();}
+  },1000);
+}
+function stopTimer(){ if(GS.timerInterval){clearInterval(GS.timerInterval);GS.timerInterval=null;} document.getElementById('timer-disp').style.display='none'; }
+function updateTimerUI(){
+  const m=Math.floor(GS.timerRemaining/60); const s=GS.timerRemaining%60;
+  document.getElementById('timer-val').textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  document.getElementById('timer-disp').className='timer-disp'+(GS.timerRemaining<=30?' alert':'');
+}
+
+/* ════════════════════════════════════
+   MODAL
+════════════════════════════════════ */
+function showModal(icon,title,body,btns){
+  document.getElementById('modal-icon').textContent=icon;
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-body').textContent=body;
+  document.getElementById('modal-btns').innerHTML=btns.map((b,i)=>`<button class="modal-btn ${b.cls||'secondary'}" onclick="${b.fn}">${b.text}</button>`).join('');
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){ document.getElementById('modal').classList.remove('open'); }
+
+/* ════════════════════════════════════
+   GAME START
+════════════════════════════════════ */
+function startGame(sc){
+  GS.scenario=sc; GS.completedQuests=[]; GS.inventory=[]; GS.trust={suin:0,aran:0}; GS.hqCompleted=[]; GS.hintsUsed={};
+  const meta=SCENARIO_META[sc];
+  const logs={A:['잠입 경로 분석 중...','기숙사 배치 로드 중...','경비 패턴 수신...','시스템 준비 완료.'],B:['QR 데이터베이스 초기화...','모스부호 모듈 활성화...','노트 암호 시스템 로드...','준비 완료.'],C:['선별 기준 DB 접속...','강당 감시 피드 수신...','UV 조명 모듈 활성화...','준비 완료.']};
+  document.getElementById('ld-code').textContent=meta.label;
+  document.getElementById('ld-title').textContent=meta.title;
+  document.getElementById('ld-fill').style.width='0';
+  document.getElementById('ld-log').textContent=logs[sc][0];
+  SS('s-loading');
+  let step=0; const total=180;
+  const logArr=logs[sc]; const logStep=Math.floor(total/logArr.length);
+  const t=setInterval(()=>{
+    step++; document.getElementById('ld-fill').style.width=(step/total*100)+'%';
+    document.getElementById('ld-log').textContent=logArr[Math.min(Math.floor(step/logStep),logArr.length-1)];
+    if(step>=total){clearInterval(t);initGame(sc);}
+  },14);
+}
+
+function initGame(sc){
+  const meta=SCENARIO_META[sc];
+  document.getElementById('mp-gtitle').textContent=meta.title;
+  document.getElementById('mp-slabel').textContent=meta.label;
+  updateInv(); adjustTrust('suin',0); adjustTrust('aran',0);
+  buildQuestList(sc);
+  const firstQ=meta.order[0];
+  SS('s-game');
+  loadQuest(firstQ);
+  addLog('게임 시작. 에덴 기숙학원에 오신 것을 환영합니다.','key');
+}
+
+/* ════════════════════════════════════
+   QUEST LIST
+════════════════════════════════════ */
+function buildQuestList(sc){
+  const meta=SCENARIO_META[sc]; const db=QUEST_DB[sc];
+  const el=document.getElementById('quest-list'); el.innerHTML='';
+  [1,2,3].forEach(stage=>{
+    const qs=meta.stages[stage]; if(!qs)return;
+    const gl=document.createElement('div'); gl.className='q-group-lbl'; gl.textContent=`STAGE ${stage}`; el.appendChild(gl);
+    qs.forEach(qid=>{
+      const q=db[qid]; if(!q)return;
+      const div=document.createElement('div'); div.className='q-item locked'; div.id='qi-'+qid;
+      div.innerHTML=`<div class="q-dot"></div><div class="q-info"><div class="q-code">${qid}</div><div class="q-name">${q.title}</div></div>`;
+      div.onclick=()=>{ if(!div.classList.contains('locked'))loadQuest(qid); };
+      el.appendChild(div);
+    });
+  });
+  unlockQuest(meta.order[0]);
+}
+function unlockQuest(qid){
+  const el=document.getElementById('qi-'+qid);
+  if(el)el.classList.remove('locked');
+}
+function setQuestActive(qid){
+  document.querySelectorAll('.q-item').forEach(e=>e.classList.remove('active'));
+  const el=document.getElementById('qi-'+qid);
+  if(el)el.classList.add('active');
+}
+function setQuestDone(qid){
+  const el=document.getElementById('qi-'+qid);
+  if(el){el.classList.remove('active');el.classList.add('done');}
+}
+
+/* ════════════════════════════════════
+   LOAD QUEST
+════════════════════════════════════ */
+function loadQuest(qid){
+  stopTimer();
+  const db=QUEST_DB[GS.scenario]; const q=db[qid];
+  if(!q)return; GS.currentQuest=qid;
+  setQuestActive(qid);
+
+  document.getElementById('loc-icon').textContent=q.emoji;
+  document.getElementById('loc-stage').textContent='STAGE '+q.stage;
+  document.getElementById('loc-name').textContent=q.loc;
+  document.getElementById('scene-emoji').textContent=q.emoji;
+  document.getElementById('scene-img-lbl').textContent=q.loc;
+  document.getElementById('q-code-tag').textContent=qid;
+  document.getElementById('q-title').textContent=q.title;
+  document.getElementById('q-problem').textContent=q.problem;
+
+  // NPC
+  const npcEl=document.getElementById('npc-box');
+  if(q.npc){ npcEl.style.display='block'; npcEl.innerHTML=q.npc; }
+  else npcEl.style.display='none';
+
+  // Required items
+  const itemsLbl=document.getElementById('items-lbl');
+  const itemsRow=document.getElementById('items-row');
+  if(q.items&&q.items.length>0){
+    itemsLbl.style.display='block';
+    itemsRow.innerHTML=q.items.map(id=>{
+      const have=hasItem(id); const item=ITEMS[id]||{name:id,emoji:'❓'};
+      return `<div class="item-chip ${have?'have':'missing'}">${item.emoji} ${item.name}</div>`;
+    }).join('');
+  } else { itemsLbl.style.display='none'; itemsRow.innerHTML=''; }
+
+  // Hints
+  if(!GS.hintsUsed[qid]) GS.hintsUsed[qid]=0;
+  document.getElementById('hint-body').textContent='';
+  document.getElementById('hint-body').classList.remove('open');
+  document.getElementById('hint-count').textContent=`(${q.hintsMax-GS.hintsUsed[qid]}/${q.hintsMax})`;
+
+  // Timer
+  if(q.timeLimit>0) startTimer(q.timeLimit,()=>onTimeout(qid));
+
+  // Action area
+  renderAction(qid,q);
+  clearFeedback();
+
+  document.getElementById('scene-wrap').scrollTo(0,0);
+}
+
+/* ════════════════════════════════════
+   RENDER ACTION AREA
+════════════════════════════════════ */
+function renderAction(qid,q){
+  const area=document.getElementById('action-area');
+  let html='';
+
+  if(q.type==='code'||q.type==='caesar'){
+    const lbl=q.type==='caesar'?'카이사르 암호 해독 — 4자리 입력':'잠금 해제 코드 입력';
+    html=`<div class="puzzle-wrap"><div class="puzzle-lbl">${lbl}</div><div class="input-row"><input class="code-input" id="code-inp" maxlength="6" placeholder="_ _ _ _" oninput="this.value=this.value.toUpperCase()" onkeydown="if(event.key==='Enter')submitCode('${qid}')"/><button class="btn-submit" onclick="submitCode('${qid}')">확인</button></div></div>`;
+  } else if(q.type==='choice'||q.type==='logic'){
+    html=`<div class="puzzle-wrap"><div class="puzzle-lbl">선택하세요</div><div class="choice-btns">${q.choices.map((c,i)=>`<button class="choice-btn ${c.danger?'danger':c.safe?'safe':''}" onclick="submitChoice('${qid}',${i})">${c.text}</button>`).join('')}</div></div>`;
+  } else if(q.type==='observe'){
+    html=`<div class="puzzle-wrap"><div class="puzzle-lbl">공간을 탐색하세요</div><button class="interact-btn" onclick="submitObserve('${qid}')">🔍 조사 완료 — 다음으로 진행</button></div>`;
+  }
+
+  html+=`<div class="feedback" id="feedback"></div>`;
+  area.innerHTML=html;
+}
+
+/* ════════════════════════════════════
+   SUBMIT HANDLERS
+════════════════════════════════════ */
+function submitCode(qid){
+  const db=QUEST_DB[GS.scenario]; const q=db[qid];
+  const val=(document.getElementById('code-inp')?.value||'').trim().toUpperCase();
+  if(!val){ showFeedback('err','코드를 입력해줘.'); return; }
+  if(val===q.answer){ onQuestSuccess(qid); }
+  else {
+    showFeedback('err','틀렸어. 다시 생각해봐.');
+    const inp=document.getElementById('code-inp');
+    if(inp){ inp.classList.add('err'); setTimeout(()=>inp.classList.remove('err'),400); inp.value=''; inp.focus(); }
+    addLog(`[${qid}] 오답 입력: ${val}`,'bad');
+  }
+}
+
+function submitChoice(qid,idx){
+  const db=QUEST_DB[GS.scenario]; const q=db[qid];
+  // Trust effect
+  if(q.choiceTrust&&q.choiceTrust[idx]){
+    const ct=q.choiceTrust[idx];
+    if(ct.suin)adjustTrust('suin',ct.suin);
+    if(ct.aran)adjustTrust('aran',ct.aran);
+  }
+  // Grant items
+  if(q.choiceGrant&&q.choiceGrant[idx]) q.choiceGrant[idx].forEach(id=>grantItem(id));
+  // Trust effect from base
+  if(q.trust){ if(q.trust.suin)adjustTrust('suin',q.trust.suin); if(q.trust.aran)adjustTrust('aran',q.trust.aran); }
+
+  const isCorrect=idx===q.correctChoice;
+  const choice=q.choices[idx];
+
+  // Determine next
+  let nextQ=q.next;
+  if(q.choiceNext&&q.choiceNext[idx]) nextQ=q.choiceNext[idx];
+
+  showModal(
+    isCorrect?'✅':'⚠️',
+    isCorrect?'선택 완료':'선택 결과',
+    choice.text+'\n\n'+(isCorrect?'단서를 찾았다!':'다른 결과로 이어진다...'),
+    [{text:'계속',cls:'primary',fn:`closeModal();onQuestSuccessNext('${qid}','${nextQ}')`}]
+  );
+  addLog(`[${qid}] 선택: ${choice.text}`, isCorrect?'good':'bad');
+}
+
+function submitObserve(qid){
+  const db=QUEST_DB[GS.scenario]; const q=db[qid];
+  if(q.trust){ if(q.trust.suin)adjustTrust('suin',q.trust.suin); if(q.trust.aran)adjustTrust('aran',q.trust.aran); }
+  q.grants&&q.grants.forEach(id=>grantItem(id));
+  showFeedback('ok','탐색 완료! 단서를 발견했다.');
+  setTimeout(()=>onQuestSuccessNext(qid,q.next),900);
+}
+
+/* ════════════════════════════════════
+   QUEST SUCCESS
+════════════════════════════════════ */
+function onQuestSuccess(qid){
+  const db=QUEST_DB[GS.scenario]; const q=db[qid];
+  stopTimer();
+  if(q.trust){ if(q.trust.suin)adjustTrust('suin',q.trust.suin); if(q.trust.aran)adjustTrust('aran',q.trust.aran); }
+  q.grants&&q.grants.forEach(id=>grantItem(id));
+  showFeedback('ok','✓ 해결! 다음으로 진행한다.');
+  const inp=document.getElementById('code-inp');
+  if(inp)inp.classList.add('ok');
+  addLog(`[${qid}] 완료!`,'good');
+  setTimeout(()=>onQuestSuccessNext(qid,q.next),900);
+}
+
+function onQuestSuccessNext(qid,nextQ){
+  setQuestDone(qid);
+  if(!GS.completedQuests.includes(qid)) GS.completedQuests.push(qid);
+  if(nextQ==='ENDING') return triggerEnding();
+  if(nextQ==='ENDING-DEFEAT') return triggerEnding('defeat');
+  const db=QUEST_DB[GS.scenario];
+  if(db[nextQ]) unlockQuest(nextQ);
+  setTimeout(()=>loadQuest(nextQ),300);
+}
+
+function onTimeout(qid){
+  const q=QUEST_DB[GS.scenario]?.[qid];
+  if(qid==='A-10-gas'){
+    showModal('☠️','가스실 탈출 실패','가스로 인해 의식을 잃었다...\n게임 오버. 다시 도전하겠습니까?',
+      [{text:'다시 시도',cls:'primary',fn:`closeModal();loadQuest('${qid}')`},{text:'처음으로',cls:'secondary',fn:"closeModal();SS('s-title')"}]);
+    addLog('게임 오버 — 가스실 탈출 실패','bad');
+  } else if(q?.type==='code'||q?.type==='logic'){
+    showFeedback('err','시간 초과!');
+    addLog(`[${qid}] 시간 초과`,'bad');
+  }
+}
+
+/* ════════════════════════════════════
+   HINT
+════════════════════════════════════ */
+function toggleHint(){
+  const body=document.getElementById('hint-body');
+  const qid=GS.currentQuest; if(!qid)return;
+  const q=QUEST_DB[GS.scenario]?.[qid];
+  if(!q||!q.hints||q.hints.length===0){body.textContent='이 퀘스트에는 힌트가 없어.';body.classList.add('open');return;}
+  if(body.classList.contains('open')){ body.classList.remove('open'); return; }
+  const used=GS.hintsUsed[qid]||0;
+  if(used>=q.hintsMax){ body.textContent='힌트를 모두 사용했어.'; body.classList.add('open'); return; }
+  GS.hintsUsed[qid]=(used+1);
+  body.textContent=q.hints.slice(0,GS.hintsUsed[qid]).join('\n\n');
+  body.classList.add('open');
+  document.getElementById('hint-count').textContent=`(${q.hintsMax-GS.hintsUsed[qid]}/${q.hintsMax})`;
+  addLog(`힌트 사용 [${qid}]`,'info');
+}
+
+/* ════════════════════════════════════
+   ENDING
+════════════════════════════════════ */
+const ENDINGS={
+  liberation:{badge:'🌟 완전 해방 엔딩',title:'에덴의 진실이 세상에',sub:'규리 구출 + 수인 정체 완전 폭로 + 에덴 조직 붕괴.\n당신의 선택이 세상을 바꿨습니다.'},
+  truth:{badge:'✨ 진실 엔딩',title:'진실에 도달하다',sub:'규리 구출 + 수인의 정체 폭로.\n에덴의 비밀 일부가 밝혀졌습니다.'},
+  escape:{badge:'🚪 탈출 엔딩',title:'에덴을 빠져나오다',sub:'규리를 구출하고 탈출에 성공했습니다.\n에덴의 문은 닫혔지만, 다른 에덴은 아직 열려 있습니다.'},
+  defeat:{badge:'💀 도덕적 패배 엔딩',title:'선택받은 자가 되다',sub:'당신은 에덴의 철학을 받아들였습니다.\n규리는 여전히 지하에 있습니다.'},
+};
+function getEndingType(){
+  const {aran,suin}=GS.trust; const hq=GS.hqCompleted.length;
+  if(aran>=60&&hq>=2)return'liberation';
+  if(aran>=40&&hq>=1)return'truth';
+  if(suin>=50)return'defeat';
+  return'escape';
+}
+function triggerEnding(type){
+  stopTimer();
+  const et=type||getEndingType(); const e=ENDINGS[et]||ENDINGS.escape;
+  document.getElementById('end-badge').textContent=e.badge;
+  document.getElementById('end-title').textContent=e.title;
+  document.getElementById('end-sub').textContent=e.sub;
+  document.getElementById('end-suin').textContent=GS.trust.suin;
+  document.getElementById('end-aran').textContent=GS.trust.aran;
+  addLog('게임 종료 — '+e.badge,'key');
+  setTimeout(()=>SS('s-ending'),600);
+}
+
+/* ════════════════════════════════════
+   KEYBOARD
+════════════════════════════════════ */
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){
+    const active=document.querySelector('.screen.active');
+    if(active?.id==='s-scenario')SS('s-title');
+    else if(active?.id==='s-game'){
+      showModal('⏸️','일시 정지','게임을 종료하시겠습니까?',
+        [{text:'계속',cls:'secondary',fn:'closeModal()'},{text:'처음으로',cls:'danger',fn:"closeModal();SS('s-title')"}]);
+    }
+  }
+});
+
+SS('s-title');
+</script>
+</body>
+</html>

@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>에덴 기숙학원의 비밀</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;400;600;700;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet"/>
+<style>
+/* ═══════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg0:#06060e;--bg1:#0a0a18;--bg2:#0f0f22;--bg3:#14142e;
+  --purple:#5546CC;--purple2:#7B6EE8;--purple3:#A89FF5;--purple-glow:rgba(85,70,204,0.18);
+  --teal:#18A87A;--teal-glow:rgba(24,168,122,0.15);
+  --amber:#C07A18;--coral:#B83820;
+  --gold:#B8963C;--gold2:#D4B86A;
+  --text:#E6E4F4;--text2:#9894B8;--text3:#504E6A;
+  --border:rgba(85,70,204,0.18);--border2:rgba(85,70,204,0.08);
+  --serif:'Noto Serif KR',serif;--sans:'Noto Sans KR',sans-serif;--mono:'Share Tech Mono',monospace;
+}
+html,body{width:100%;min-height:100%;background:var(--bg0);color:var(--text);font-family:var(--sans);overflow-x:hidden}
+
+/* ═══════════════════════════════════════
+   NOISE TEXTURE
+═══════════════════════════════════════ */
+body::before{
+  content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.35;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='.06'/%3E%3C/svg%3E");
+}
+
+/* ═══════════════════════════════════════
+   SCREENS
+═══════════════════════════════════════ */
+.screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .7s ease;z-index:1}
+.screen.active{opacity:1;pointer-events:all}
+
+/* ═══════════════════════════════════════
+   TITLE SCREEN
+═══════════════════════════════════════ */
+#title-screen{
+  background:
+    radial-gradient(ellipse 70% 50% at 25% 30%, rgba(85,70,204,.22) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 78% 75%, rgba(24,168,122,.1) 0%, transparent 60%),
+    var(--bg0);
+}
+
+/* 스캔라인 */
+#title-screen::after{
+  content:'';position:absolute;inset:0;pointer-events:none;
+  background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.06) 3px,rgba(0,0,0,.06) 4px);
+}
+
+.title-wrap{position:relative;z-index:2;text-align:center;max-width:700px;padding:2rem}
+
+/* 상단 ARG 태그 */
+.arg-tag{
+  display:inline-flex;align-items:center;gap:.6rem;
+  border:1px solid rgba(184,150,60,.4);
+  color:var(--gold2);font-family:var(--mono);font-size:.65rem;
+  letter-spacing:.28em;padding:.32rem 1.1rem;margin-bottom:2.8rem;
+  animation:pulse-gold 4s ease-in-out infinite;
+}
+.arg-tag-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:blink-dot 1.6s ease-in-out infinite}
+@keyframes pulse-gold{0%,100%{box-shadow:0 0 0 transparent}50%{box-shadow:0 0 18px rgba(184,150,60,.25)}}
+@keyframes blink-dot{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* 메인 타이틀 */
+.title-en{
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.3em;
+  color:var(--text3);margin-bottom:.8rem;text-transform:uppercase;
+}
+.title-kr{
+  font-family:var(--serif);font-weight:900;
+  font-size:clamp(2.6rem,5.5vw,4.2rem);
+  line-height:1.08;letter-spacing:-.02em;
+  color:var(--text);margin-bottom:.5rem;
+  text-shadow:0 0 80px rgba(85,70,204,.45);
+  animation:title-flicker 10s ease-in-out infinite;
+}
+@keyframes title-flicker{0%,91%,93%,95%,100%{opacity:1}92%,94%{opacity:.82}}
+
+.title-sub{
+  font-size:.95rem;color:var(--text2);
+  letter-spacing:.06em;margin-bottom:.5rem;
+}
+.title-sub2{
+  font-family:var(--mono);font-size:.68rem;
+  color:var(--text3);letter-spacing:.12em;margin-bottom:3.2rem;
+}
+
+/* 구분선 */
+.title-line{
+  width:160px;height:1px;margin:0 auto 3rem;
+  background:linear-gradient(90deg,transparent,var(--purple),transparent);
+}
+
+/* 시작 버튼 */
+.btn-start{
+  background:transparent;border:1px solid var(--purple);
+  color:var(--text);font-family:var(--serif);font-size:1rem;font-weight:600;
+  padding:1rem 3.2rem;cursor:pointer;letter-spacing:.12em;
+  position:relative;overflow:hidden;transition:all .25s;
+}
+.btn-start::before{
+  content:'';position:absolute;inset:0;
+  background:var(--purple-glow);opacity:0;transition:opacity .25s;
+}
+.btn-start:hover{border-color:var(--purple2);transform:translateY(-2px)}
+.btn-start:hover::before{opacity:1}
+.btn-start:hover .btn-start-glow{opacity:1}
+.btn-start-glow{
+  position:absolute;inset:0;pointer-events:none;opacity:0;
+  box-shadow:inset 0 0 30px rgba(85,70,204,.3);transition:opacity .25s;
+}
+
+/* 하단 힌트 */
+.title-hint{
+  margin-top:2.8rem;font-family:var(--mono);font-size:.62rem;
+  color:var(--text3);letter-spacing:.14em;
+  animation:fade-hint 3s ease-in-out infinite alternate;
+}
+@keyframes fade-hint{from{opacity:.3}to{opacity:.7}}
+
+/* 배경 장식 원 */
+.bg-circle{
+  position:absolute;border-radius:50%;pointer-events:none;z-index:1;
+  border:1px solid rgba(85,70,204,.08);
+}
+.bg-c1{width:600px;height:600px;top:-180px;right:-150px;animation:slow-spin 40s linear infinite}
+.bg-c2{width:400px;height:400px;bottom:-100px;left:-80px;animation:slow-spin 55s linear infinite reverse}
+.bg-c3{width:200px;height:200px;top:35%;right:8%;border-color:rgba(24,168,122,.08);animation:slow-spin 30s linear infinite}
+@keyframes slow-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+
+/* 코너 장식 */
+.corner{position:absolute;width:40px;height:40px;pointer-events:none;z-index:2}
+.corner-tl{top:1.5rem;left:1.5rem;border-top:1px solid rgba(184,150,60,.3);border-left:1px solid rgba(184,150,60,.3)}
+.corner-tr{top:1.5rem;right:1.5rem;border-top:1px solid rgba(184,150,60,.3);border-right:1px solid rgba(184,150,60,.3)}
+.corner-bl{bottom:1.5rem;left:1.5rem;border-bottom:1px solid rgba(184,150,60,.3);border-left:1px solid rgba(184,150,60,.3)}
+.corner-br{bottom:1.5rem;right:1.5rem;border-bottom:1px solid rgba(184,150,60,.3);border-right:1px solid rgba(184,150,60,.3)}
+
+/* ═══════════════════════════════════════
+   SCENARIO SELECT SCREEN
+═══════════════════════════════════════ */
+#scenario-screen{
+  background:
+    radial-gradient(ellipse 60% 60% at 50% 0%, rgba(85,70,204,.14) 0%, transparent 65%),
+    var(--bg0);
+  overflow-y:auto;padding:4rem 2rem;
+}
+
+.sc-header{text-align:center;margin-bottom:3.2rem;position:relative;z-index:2}
+.sc-back{
+  position:absolute;left:0;top:50%;transform:translateY(-50%);
+  background:transparent;border:none;color:var(--text3);
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;
+  cursor:pointer;transition:color .2s;padding:.4rem .8rem;
+}
+.sc-back:hover{color:var(--purple3)}
+.sc-label{font-family:var(--mono);font-size:.65rem;letter-spacing:.25em;color:var(--text3);margin-bottom:.6rem}
+.sc-title{font-family:var(--serif);font-size:clamp(1.5rem,3vw,2.2rem);font-weight:700;color:var(--text)}
+.sc-desc{font-size:.88rem;color:var(--text2);margin-top:.5rem;line-height:1.6}
+
+/* 카드 그리드 */
+.scenario-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:1.4rem;max-width:980px;width:100%;position:relative;z-index:2;
+}
+
+.sc-card{
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--border);
+  border-radius:3px;padding:0;
+  cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .25s,border-color .25s,box-shadow .25s;
+}
+.sc-card:hover{transform:translateY(-5px)}
+.sc-card.card-a:hover{border-color:rgba(85,70,204,.5);box-shadow:0 20px 50px rgba(85,70,204,.15)}
+.sc-card.card-b:hover{border-color:rgba(24,168,122,.5);box-shadow:0 20px 50px rgba(24,168,122,.15)}
+.sc-card.card-c:hover{border-color:rgba(184,150,60,.5);box-shadow:0 20px 50px rgba(184,150,60,.15)}
+
+/* 카드 상단 컬러 바 */
+.sc-card-bar{height:3px;width:100%}
+.card-a .sc-card-bar{background:linear-gradient(90deg,var(--purple),var(--purple2))}
+.card-b .sc-card-bar{background:linear-gradient(90deg,var(--teal),#2DD4BF)}
+.card-c .sc-card-bar{background:linear-gradient(90deg,var(--amber),var(--gold2))}
+
+.sc-card-body{padding:1.8rem 1.8rem 1.6rem}
+
+/* 시나리오 코드 */
+.sc-code{
+  font-family:var(--mono);font-size:.62rem;letter-spacing:.22em;
+  margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem;
+}
+.sc-code-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.card-a .sc-code{color:var(--purple3)}.card-a .sc-code-dot{background:var(--purple2)}
+.card-b .sc-code{color:#6ECFBC}.card-b .sc-code-dot{background:var(--teal)}
+.card-c .sc-code{color:var(--gold2)}.card-c .sc-code-dot{background:var(--amber)}
+
+/* 카드 제목 */
+.sc-card-title{
+  font-family:var(--serif);font-size:1.25rem;font-weight:700;
+  color:var(--text);line-height:1.25;margin-bottom:.5rem;
+}
+.sc-card-genre{
+  font-size:.75rem;color:var(--text3);
+  letter-spacing:.06em;margin-bottom:1.2rem;
+}
+
+/* 구분선 */
+.sc-card-div{height:1px;background:var(--border2);margin-bottom:1.2rem}
+
+/* 시놉시스 */
+.sc-synopsis{
+  font-size:.82rem;color:var(--text2);line-height:1.72;
+  margin-bottom:1.4rem;
+}
+
+/* 캐릭터 태그 */
+.sc-chars{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.4rem}
+.sc-char-tag{
+  font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;
+  padding:.22rem .65rem;border-radius:1px;
+  background:rgba(255,255,255,.04);border:1px solid var(--border2);
+  color:var(--text3);
+}
+
+/* 퀘스트 수 & 버튼 */
+.sc-card-foot{
+  display:flex;align-items:center;justify-content:space-between;
+  padding-top:1rem;border-top:1px solid var(--border2);
+}
+.sc-quest-count{font-family:var(--mono);font-size:.65rem;color:var(--text3)}
+.sc-quest-count span{color:var(--text2);font-size:.9rem;font-weight:500}
+.sc-btn-enter{
+  background:transparent;border:none;
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;
+  cursor:pointer;display:flex;align-items:center;gap:.4rem;transition:gap .2s;
+}
+.card-a .sc-btn-enter{color:var(--purple3)}
+.card-b .sc-btn-enter{color:#6ECFBC}
+.card-c .sc-btn-enter{color:var(--gold2)}
+.sc-card:hover .sc-btn-enter{gap:.7rem}
+
+/* 카드 배경 글로우 */
+.sc-card-glow{
+  position:absolute;inset:0;pointer-events:none;opacity:0;
+  transition:opacity .3s;border-radius:3px;
+}
+.card-a .sc-card-glow{background:radial-gradient(ellipse at 50% 0%,rgba(85,70,204,.12),transparent 70%)}
+.card-b .sc-card-glow{background:radial-gradient(ellipse at 50% 0%,rgba(24,168,122,.1),transparent 70%)}
+.card-c .sc-card-glow{background:radial-gradient(ellipse at 50% 0%,rgba(184,150,60,.1),transparent 70%)}
+.sc-card:hover .sc-card-glow{opacity:1}
+
+/* 난이도 바 */
+.sc-diff{margin-bottom:1.2rem}
+.sc-diff-label{font-family:var(--mono);font-size:.58rem;color:var(--text3);letter-spacing:.12em;margin-bottom:.35rem}
+.sc-diff-bar{height:3px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.sc-diff-fill{height:100%;border-radius:2px;transition:width .6s ease}
+.card-a .sc-diff-fill{background:linear-gradient(90deg,var(--purple),var(--purple2));width:72%}
+.card-b .sc-diff-fill{background:linear-gradient(90deg,var(--teal),#2DD4BF);width:60%}
+.card-c .sc-diff-fill{background:linear-gradient(90deg,var(--amber),var(--gold2));width:85%}
+
+/* ═══════════════════════════════════════
+   TRANSITION SCREEN (로딩)
+═══════════════════════════════════════ */
+#transition-screen{
+  background:var(--bg0);flex-direction:column;gap:1.5rem;
+}
+.trans-code{font-family:var(--mono);font-size:.7rem;color:var(--text3);letter-spacing:.2em}
+.trans-title{font-family:var(--serif);font-size:1.6rem;color:var(--text);text-align:center}
+.trans-bar-wrap{width:280px;height:2px;background:rgba(255,255,255,.06);border-radius:1px;overflow:hidden}
+.trans-bar-fill{height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--purple2));border-radius:1px;transition:width .05s linear}
+.trans-log{font-family:var(--mono);font-size:.62rem;color:var(--text3);letter-spacing:.1em;min-height:1.2em}
+
+/* ═══════════════════════════════════════
+   PLACEHOLDER GAME SCREEN
+═══════════════════════════════════════ */
+#game-screen{
+  background:var(--bg1);align-items:stretch;justify-content:flex-start;
+  flex-direction:row;
+}
+.game-placeholder{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:1rem;
+}
+.game-placeholder-label{
+  font-family:var(--mono);font-size:.65rem;letter-spacing:.2em;color:var(--text3);
+  border:1px solid var(--border);padding:.4rem 1rem;
+}
+.game-placeholder-title{
+  font-family:var(--serif);font-size:1.8rem;color:var(--text2);
+}
+.game-placeholder-sub{font-size:.85rem;color:var(--text3)}
+.btn-back-title{
+  margin-top:1rem;background:transparent;border:1px solid var(--border);
+  color:var(--text3);font-family:var(--mono);font-size:.68rem;
+  letter-spacing:.12em;padding:.55rem 1.4rem;cursor:pointer;transition:all .2s;
+}
+.btn-back-title:hover{border-color:var(--purple);color:var(--purple3)}
+
+/* ═══════════════════════════════════════
+   SCROLLBAR
+═══════════════════════════════════════ */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg0)}
+::-webkit-scrollbar-thumb{background:rgba(85,70,204,.35);border-radius:2px}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     SCREEN 1: TITLE
+══════════════════════════════════ -->
+<section class="screen active" id="title-screen">
+
+  <!-- 배경 장식 -->
+  <div class="bg-circle bg-c1"></div>
+  <div class="bg-circle bg-c2"></div>
+  <div class="bg-circle bg-c3"></div>
+  <div class="corner corner-tl"></div>
+  <div class="corner corner-tr"></div>
+  <div class="corner corner-bl"></div>
+  <div class="corner corner-br"></div>
+
+  <div class="title-wrap">
+    <div class="arg-tag">
+      <div class="arg-tag-dot"></div>
+      ARG · ROOM ESCAPE · DIGITAL STORYTELLING
+    </div>
+
+    <div class="title-en">EDEN ACADEMY — THE SECRET</div>
+
+    <h1 class="title-kr">에덴 기숙학원의<br>비밀</h1>
+
+    <p class="title-sub">생체 실험실 탈출 및 친구 구출</p>
+    <p class="title-sub2">Chapter 10 · 11 · 12 디지털 스토리텔링 실습 적용</p>
+
+    <div class="title-line"></div>
+
+    <button class="btn-start" onclick="goToScenario()">
+      <span class="btn-start-glow"></span>
+      게임 시작하기
+    </button>
+
+    <p class="title-hint">▸ 시나리오를 선택하고 에덴의 비밀을 파헤쳐라</p>
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════
+     SCREEN 2: SCENARIO SELECT
+══════════════════════════════════ -->
+<section class="screen" id="scenario-screen">
+
+  <div class="sc-header" style="position:relative;width:100%;max-width:980px">
+    <button class="sc-back" onclick="goToTitle()">← 뒤로</button>
+    <p class="sc-label">SELECT SCENARIO</p>
+    <h2 class="sc-title">시나리오를 선택하세요</h2>
+    <p class="sc-desc">세 가지 이야기는 각각 다른 장르와 진실을 담고 있습니다.</p>
+  </div>
+
+  <div class="scenario-grid">
+
+    <!-- 시나리오 A -->
+    <div class="sc-card card-a" onclick="startScenario('A')">
+      <div class="sc-card-glow"></div>
+      <div class="sc-card-bar"></div>
+      <div class="sc-card-body">
+        <div class="sc-code">
+          <div class="sc-code-dot"></div>
+          SCENARIO · A
+        </div>
+        <h3 class="sc-card-title">에덴의 가면</h3>
+        <p class="sc-card-genre">심리 스릴러 × 바이오호러</p>
+        <div class="sc-card-div"></div>
+
+        <div class="sc-diff">
+          <div class="sc-diff-label">DIFFICULTY ·&nbsp;&nbsp;★★★★☆</div>
+          <div class="sc-diff-bar"><div class="sc-diff-fill"></div></div>
+        </div>
+
+        <p class="sc-synopsis">
+          절친 규리를 찾아 에덴 기숙학원에 위장 전입한 서연.<br>
+          완벽한 모범생 수인의 도움을 받아 비밀을 파헤치지만,
+          믿었던 손길이 가장 위험한 함정이었다.
+        </p>
+
+        <div class="sc-chars">
+          <span class="sc-char-tag">권서연 (주인공)</span>
+          <span class="sc-char-tag">황수인 (학생회장)</span>
+          <span class="sc-char-tag">김아란 (탈출자)</span>
+          <span class="sc-char-tag">김규리 (구조 대상)</span>
+        </div>
+
+        <div class="sc-card-foot">
+          <div class="sc-quest-count">QUESTS &nbsp;<span>11</span></div>
+          <button class="sc-btn-enter">이 시나리오 시작 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 시나리오 B -->
+    <div class="sc-card card-b" onclick="startScenario('B')">
+      <div class="sc-card-glow"></div>
+      <div class="sc-card-bar"></div>
+      <div class="sc-card-body">
+        <div class="sc-code">
+          <div class="sc-code-dot"></div>
+          SCENARIO · B
+        </div>
+        <h3 class="sc-card-title">무균실의 기억</h3>
+        <p class="sc-card-genre">SF 디스토피아 × 탈출 미스터리</p>
+        <div class="sc-card-div"></div>
+
+        <div class="sc-diff">
+          <div class="sc-diff-label">DIFFICULTY ·&nbsp;&nbsp;★★★☆☆</div>
+          <div class="sc-diff-bar"><div class="sc-diff-fill"></div></div>
+        </div>
+
+        <p class="sc-synopsis">
+          규리는 단순한 피실험자가 아니었다.<br>
+          그녀가 미리 숨겨둔 암호와 기록이 탈출의 열쇠.
+          먼저 탈출한 아란의 기억마저 조작됐다면?
+        </p>
+
+        <div class="sc-chars">
+          <span class="sc-char-tag">권서연 (주인공)</span>
+          <span class="sc-char-tag">황수인 (간부)</span>
+          <span class="sc-char-tag">김아란 (잠재적 위협)</span>
+          <span class="sc-char-tag">김규리 (단서 설계자)</span>
+        </div>
+
+        <div class="sc-card-foot">
+          <div class="sc-quest-count">QUESTS &nbsp;<span>7</span></div>
+          <button class="sc-btn-enter">이 시나리오 시작 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 시나리오 C -->
+    <div class="sc-card card-c" onclick="startScenario('C')">
+      <div class="sc-card-glow"></div>
+      <div class="sc-card-bar"></div>
+      <div class="sc-card-body">
+        <div class="sc-code">
+          <div class="sc-code-dot"></div>
+          SCENARIO · C
+        </div>
+        <h3 class="sc-card-title">선택받은 자들</h3>
+        <p class="sc-card-genre">도덕 공포 × 사회 비판 스릴러</p>
+        <div class="sc-card-div"></div>
+
+        <div class="sc-diff">
+          <div class="sc-diff-label">DIFFICULTY ·&nbsp;&nbsp;★★★★★</div>
+          <div class="sc-diff-bar"><div class="sc-diff-fill"></div></div>
+        </div>
+
+        <p class="sc-synopsis">
+          실험은 '사회적 적자 선별'이라는 철학을 가진다.<br>
+          수인은 이 철학을 진심으로 믿는다.
+          탈출 후에도 당신은 선택해야 한다 — 진실을 세상에 알릴 것인가.
+        </p>
+
+        <div class="sc-chars">
+          <span class="sc-char-tag">권서연 (주인공)</span>
+          <span class="sc-char-tag">황수인 (이념형 빌런)</span>
+          <span class="sc-char-tag">김아란 (저항군)</span>
+          <span class="sc-char-tag">김규리 (열쇠)</span>
+        </div>
+
+        <div class="sc-card-foot">
+          <div class="sc-quest-count">QUESTS &nbsp;<span>6</span></div>
+          <button class="sc-btn-enter">이 시나리오 시작 →</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ══════════════════════════════════
+     SCREEN 3: TRANSITION (로딩)
+══════════════════════════════════ -->
+<section class="screen" id="transition-screen">
+  <p class="trans-code" id="trans-code">SCENARIO · A — LOADING</p>
+  <p class="trans-title" id="trans-title">에덴의 가면</p>
+  <div class="trans-bar-wrap">
+    <div class="trans-bar-fill" id="trans-bar"></div>
+  </div>
+  <p class="trans-log" id="trans-log">시스템 초기화 중...</p>
+</section>
+
+<!-- ══════════════════════════════════
+     SCREEN 4: GAME (Phase 2에서 구현)
+══════════════════════════════════ -->
+<section class="screen" id="game-screen">
+  <div class="game-placeholder">
+    <div class="game-placeholder-label">PHASE 2 — IN DEVELOPMENT</div>
+    <p class="game-placeholder-title" id="game-scenario-title">시나리오 A</p>
+    <p class="game-placeholder-sub">게임 화면은 다음 세션에서 구현됩니다.</p>
+    <button class="btn-back-title" onclick="goToTitle()">← 타이틀로 돌아가기</button>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════
+     JAVASCRIPT
+══════════════════════════════════ -->
+<script>
+/* ── 게임 상태 ── */
+const GAME_STATE = {
+  scenario: null,
+  currentStage: 1,
+  currentQuest: null,
+  completedQuests: [],
+  inventory: [],
+  trust: { suin: 0, aran: 0 },
+  hqCompleted: [],
+  hintsUsed: {},
+  timerActive: false,
+  timerRemaining: 0,
+};
+
+/* ── 시나리오 메타데이터 ── */
+const SCENARIO_META = {
+  A: {
+    code: 'SCENARIO · A',
+    title: '에덴의 가면',
+    genre: '심리 스릴러 × 바이오호러',
+    quests: 11,
+    logLines: [
+      '잠입 경로 확인 중...',
+      '기숙사 배치 정보 로드 중...',
+      '수인과의 첫 접촉 시뮬레이션...',
+      '보안 구역 맵 분석 중...',
+      '경비 순찰 패턴 데이터 수신...',
+      '게임 시작 준비 완료.',
+    ],
+  },
+  B: {
+    code: 'SCENARIO · B',
+    title: '무균실의 기억',
+    genre: 'SF 디스토피아 × 탈출 미스터리',
+    quests: 7,
+    logLines: [
+      'QR 데이터베이스 초기화...',
+      '규리 노트 암호 시스템 로드...',
+      '모스부호 분석 모듈 활성화...',
+      '실험 기록 데이터 복호화...',
+      '아란 기억 파편 스캔 중...',
+      '게임 시작 준비 완료.',
+    ],
+  },
+  C: {
+    code: 'SCENARIO · C',
+    title: '선택받은 자들',
+    genre: '도덕 공포 × 사회 비판 스릴러',
+    quests: 6,
+    logLines: [
+      '선별 기준 데이터베이스 접속...',
+      '강당 감시 카메라 피드 수신...',
+      '수인 이념 프로파일 분석...',
+      'UV 조명 모듈 활성화...',
+      '도덕적 분기 시스템 초기화...',
+      '게임 시작 준비 완료.',
+    ],
+  },
+};
+
+/* ── 화면 전환 ── */
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function goToTitle() {
+  showScreen('title-screen');
+}
+
+function goToScenario() {
+  showScreen('scenario-screen');
+  // 난이도 바 애니메이션 재시작
+  document.querySelectorAll('.sc-diff-fill').forEach(el => {
+    const w = el.style.width;
+    el.style.width = '0';
+    setTimeout(() => { el.style.width = w; }, 100);
+  });
+}
+
+/* ── 시나리오 시작 → 트랜지션 → 게임 ── */
+function startScenario(sc) {
+  GAME_STATE.scenario = sc;
+  const meta = SCENARIO_META[sc];
+
+  // 트랜지션 텍스트 설정
+  document.getElementById('trans-code').textContent  = meta.code;
+  document.getElementById('trans-title').textContent = meta.title;
+  document.getElementById('trans-bar').style.width   = '0';
+  document.getElementById('trans-log').textContent   = meta.logLines[0];
+
+  showScreen('transition-screen');
+
+  // 로딩 바 + 로그 애니메이션
+  const totalMs  = 2800;
+  const interval = 16;
+  const steps    = totalMs / interval;
+  const logStep  = Math.floor(steps / meta.logLines.length);
+
+  let step = 0;
+  const timer = setInterval(() => {
+    step++;
+    const pct = Math.min((step / steps) * 100, 100);
+    document.getElementById('trans-bar').style.width = pct + '%';
+
+    const logIdx = Math.min(Math.floor(step / logStep), meta.logLines.length - 1);
+    document.getElementById('trans-log').textContent = meta.logLines[logIdx];
+
+    if (step >= steps) {
+      clearInterval(timer);
+      onGameStart(sc, meta);
+    }
+  }, interval);
+}
+
+function onGameStart(sc, meta) {
+  // 게임 플레이스홀더 제목 업데이트
+  document.getElementById('game-scenario-title').textContent =
+    `시나리오 ${sc} — ${meta.title}`;
+  showScreen('game-screen');
+}
+
+/* ── 키보드 단축키 ── */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const active = document.querySelector('.screen.active');
+    if (active && active.id === 'scenario-screen') goToTitle();
+    if (active && active.id === 'game-screen')     goToTitle();
+  }
+});
+
+/* ── 초기 진입: 타이틀 ── */
+showScreen('title-screen');
+</script>
+
+</body>
+</html>
